@@ -1,0 +1,23 @@
+# This is used to start dependencies that are required to run the service or the integration tests locally.
+# To use it, run the start-deps.sh script.
+version: '3'
+services:
+  java:
+    image: openjdk:17
+    volumes:
+      - ./:/app
+    command: bash -c "cd /app && java -jar partner-service-1.0.1-all.jar --port=8032"
+    ports:
+      - 8032:8032
+  postgres:
+    image: postgres:13.10-alpine
+    environment:
+      - POSTGRES_DB=candlestick
+      - POSTGRES_USER=candlestick
+      - POSTGRES_PASSWORD=candlestick
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:6.2.6-alpine
+    ports:
+      - 6379:6379

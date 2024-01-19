@@ -1,0 +1,78 @@
+logging.level:
+  root: INFO
+  org.hibernate.dialect.Dialect: warn
+
+spring:
+  flyway:
+    enabled: true
+  jpa:
+    database: POSTGRESQL
+    generate-ddl: false
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: false # This is the default -- we have the property here, so we can easily enable SQL logging.
+  cache:
+    type: redis
+  data:
+    redis:
+      repositories:
+        enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/candlestick
+    username: candlestick
+    password: candlestick
+  redis:
+    host: localhost
+    port: 6379
+
+server:
+  port: 9000
+  error:
+    include-message: always
+    include-stacktrace: never
+
+redis:
+  ttl:
+    candlesticks-by-isin: 5m
+    instrument-exists-by-isin: 6h
+
+management:
+  endpoints:
+    web:
+      expose: "*"
+  metrics:
+    export:
+      datadog:
+        enabled: false
+
+job:
+  enabled: true
+  cron:
+    generate-candlestick:
+      scheduled: "0 * * * * *" #  beginning of every minute
+
+instrument:
+  max-page-size: 500
+  seconds-to-add: 45
+
+candlestick:
+  max-page-size: 30 # last 30 candles (i.e. 30 minutes)
+
+websocket:
+  enabled: true
+
+--- ########################################################################
+spring.config.activate.on-profile: integration-test
+
+websocket:
+  enabled: false
+
+--- ########################################################################
+spring.config.activate.on-profile: local
+
+--- ########################################################################
+spring.config.activate.on-profile: staging
+
+--- ########################################################################
+spring.config.activate.on-profile: prod

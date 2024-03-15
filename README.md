@@ -2,15 +2,11 @@
 
 The service receives Instrument and Quote updates from a remote service. Service sends Websocket messages. 
 
-The task is to receive instrument and quotes and generate candlesticks out of them. 
+The task is to receive instrument and quotes and generate candlesticks out of them that can be consumed via API to show candlestickes in the UI. 
 
 
 # Implementation details
 The service is using Spring boot framework. Due to time constraint and my experience with Spring boot, it was easier to set up DB, Cache and integration tests.
-
-Since the project was set up on Java 11, I had to use spring boot 2.x instead of 3.x.
-
-Refactored the received code. For example separated all the domains into their own data class for more readability and packaged them.
 
 The service uses DB and avoids any in memory data structure in order to avoid loss of data if an instance goes down.
 
